@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<configuration>
+	<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+	<property name="LOG_HOME" value="./logs/" />
+	<property name="AppName" value="log" />
+	<!-- 控制台输出 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg %n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 设置分割 -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 设置按尺寸和时间（同时满足）分割 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/${AppName}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxFileSize>3GB</maxFileSize>
+			<maxHistory>60</maxHistory>
+			<totalSizeCap>30GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 日志输出级别 -->
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+	
+	<!-- 打印mybatis sql日志 -->
+	<logger name="com" level="DEBUG"></logger>
+	
+</configuration>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>自动生成代码</title>
+<link rel="stylesheet" href="../layui/css/layui.css">
+<style type="text/css">
+</style>
+</head>
+<body >
+
+	<div class="layui-main site-inline">
+		<!-- 你的HTML代码 -->
+		<form class="layui-form">
+			<div class="layui-card-body">
+				<h3>自动生成-请根据实际情况填写如下信息</h3>
+			</div>
+			<!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+			<div class="layui-form-item">
+				<label class="layui-form-label">数据库连接信息</label>
+				<div class="layui-input-block">
+					<input type="text" name="dbUrl" required
+						placeholder="10.10.100.000:1521:orcl" lay-verify="required" lay-reqText="数据库连接信息必填"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">数据库登录账户</label>
+				<div class="layui-input-block">
+					<input type="text" name="userName" required placeholder=""
+						 lay-verify="required" lay-reqText="数据库登录账户必填" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">数据库登录密码</label>
+				<div class="layui-input-block">
+					<input type="text" name="userPass" required placeholder=""
+						lay-verify="required" lay-reqText="数据库登录密码必填" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">代码生成路径</label>
+				<div class="layui-input-block">
+					<input type="text" name="outDir" required value="D:\codeGen"
+						lay-verify="required" lay-reqText="代码生成路径必填"  class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">代码作者署名</label>
+				<div class="layui-input-block">
+					<input type="text" name="author" placeholder="" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">包路径</label>
+				<div class="layui-input-block">
+					<input type="text" name="packageName" required
+						value="com.xx.test" lay-verify="required" lay-reqText="包路径路径必填"  class="layui-input">
+				</div>
+			</div>
+
+			<button class="layui-btn layui-btn-normal" lay-submit lay-filter="add">添加表名</button>
+			<table class="layui-table">
+				<colgroup>
+					<col width="30%">
+					<col width="70%">
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>表名</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="dbody">
+					<tr>
+						<td class='no'>1</td>
+						<td><input type="text" name="tableName" required
+							placeholder="" lay-verify="required" lay-reqText="表名必填" class="layui-input"></td>
+						<td>
+							<button class="layui-btn layui-btn-danger" lay-submit lay-filter="del">删除</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="layui-form-item" style="text-align: center;">
+				<button class="layui-btn" lay-submit lay-filter="sub">生成</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+
+		</form>
+	</div>
+
+	<script src="../layui/layui.js"></script>
+	<script src="js/jquery-2.1.1.min.js"></script>
+	<script>
+	 	var dbody="#dbody";
+	
+		layui.use('form', function() {
+			var form = layui.form;
+			form.on('submit(del)', function(data) {
+				if($(dbody).find("tr").length<2){
+					layer.msg('至少保留一个表名');
+					return false;
+				}
+				var _tr=$(data.elem).parent().parent();
+				_tr.remove();
+				generateNo();
+				return false;
+			});
+			form.on('submit(add)', function(data) {
+				var _tr=$("<tr></tr>");
+				_tr.append("<td class='no'>1</td>");
+				_tr.append('<td><input type="text" name="tableName" required placeholder="" autocomplete="off" class="layui-input"></td>');
+				_tr.append('<td><button class="layui-btn layui-btn-danger" lay-submit lay-filter="del">删除</button></td>');
+				$(dbody).append(_tr);
+				generateNo();
+				return false;
+			});
+
+			form.on('submit(sub)', function(data) {
+				var dataArr=new Array();
+				$.each($(dbody).find("input[name='tableName']"),function(index,obj){
+					var _obj=$(obj);
+					var _tov=_obj.val().toUpperCase();
+					_obj.val(_tov);
+					dataArr.push(_tov);
+				});
+				data.field.tableNames=JSON.stringify(dataArr);
+				console.log(data.field);
+				$.ajax({
+					url : "/doGenerate",
+					data : data.field,
+					dataType : "json",
+					async : false,
+					type : 'post',
+					success : function(data) {
+						layer.msg('数据已传输到后台，请到日志查看结果');
+						return false;
+					}
+				});
+				return false;
+			});
+		});
+		
+		function generateNo(){
+			var trs=$(dbody).find("td.no");
+			$.each(trs,function(index,obj){
+				$(obj).html((index+1));				
+			});
+			
+		}
+	</script>
+</body>
+</html>
