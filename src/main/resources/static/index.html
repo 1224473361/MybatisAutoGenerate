@@ -22,29 +22,29 @@
 				<label class="layui-form-label">数据库连接信息</label>
 				<div class="layui-input-block">
 					<input type="text" name="dbUrl" required
-						placeholder="10.10.100.000:1521:orcl" lay-verify="required" lay-reqText="数据库连接信息必填"
+						placeholder="10.10.100.000:1521:orcl" 
 						class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">数据库登录账户</label>
 				<div class="layui-input-block">
-					<input type="text" name="userName" required placeholder=""
-						 lay-verify="required" lay-reqText="数据库登录账户必填" class="layui-input">
+					<input type="text" name="userName" required
+						 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">数据库登录密码</label>
 				<div class="layui-input-block">
-					<input type="text" name="userPass" required placeholder=""
-						lay-verify="required" lay-reqText="数据库登录密码必填" class="layui-input">
+					<input type="text" name="userPass" required
+						 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">代码生成路径</label>
 				<div class="layui-input-block">
-					<input type="text" name="outDir" required value="D:\codeGen"
-						lay-verify="required" lay-reqText="代码生成路径必填"  class="layui-input">
+					<input type="text" name="outDir" value="D:\codeGen" required
+						 class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -58,16 +58,16 @@
 				<label class="layui-form-label">包路径</label>
 				<div class="layui-input-block">
 					<input type="text" name="packageName" required
-						value="com.xx.test" lay-verify="required" lay-reqText="包路径路径必填"  class="layui-input">
+						value="com.xx.test" class="layui-input">
 				</div>
 			</div>
 
-			<button class="layui-btn layui-btn-normal" lay-submit lay-filter="add">添加表名</button>
+			<button class="layui-btn layui-btn-normal" lay-submit lay-filter="add"><i class="layui-icon">&#xe654;</i>添加表名</button>
 			<table class="layui-table">
 				<colgroup>
-					<col width="30%">
-					<col width="70%">
-					<col>
+					<col width="20%">
+					<col width="60%">
+					<col width="20%">
 				</colgroup>
 				<thead>
 					<tr>
@@ -80,7 +80,7 @@
 					<tr>
 						<td class='no'>1</td>
 						<td><input type="text" name="tableName" required
-							placeholder="" lay-verify="required" lay-reqText="表名必填" class="layui-input"></td>
+							placeholder=""  lay-reqText="表名必填" class="layui-input"></td>
 						<td>
 							<button class="layui-btn layui-btn-danger" lay-submit lay-filter="del">删除</button>
 						</td>
@@ -115,7 +115,7 @@
 			form.on('submit(add)', function(data) {
 				var _tr=$("<tr></tr>");
 				_tr.append("<td class='no'>1</td>");
-				_tr.append('<td><input type="text" name="tableName" required placeholder="" autocomplete="off" class="layui-input"></td>');
+				_tr.append('<td><input type="text" name="tableName" required autocomplete="off" class="layui-input"></td>');
 				_tr.append('<td><button class="layui-btn layui-btn-danger" lay-submit lay-filter="del">删除</button></td>');
 				$(dbody).append(_tr);
 				generateNo();
@@ -123,13 +123,50 @@
 			});
 
 			form.on('submit(sub)', function(data) {
+				var marr=[
+					{
+						name:'dbUrl',
+						msg:'数据库连接信息必填'
+					},
+					{
+						name:'userName',
+						msg:'数据库登录账户必填'
+					},
+					{
+						name:'userPass',
+						msg:'数据库登录密码必填'
+					},
+					{
+						name:'outDir',
+						msg:'代码生成路径必填'
+					},
+					{
+						name:'packageName',
+						msg:'包路径路径必填'
+					},
+				];
+				for(var i=0;i<marr.length;i++){
+					if(data.field[marr[i].name].length==0){
+						layer.msg(marr[i].msg);
+						return false;
+					}
+				}
+				
+				var f=false;
 				var dataArr=new Array();
 				$.each($(dbody).find("input[name='tableName']"),function(index,obj){
 					var _obj=$(obj);
-					var _tov=_obj.val().toUpperCase();
-					_obj.val(_tov);
-					dataArr.push(_tov);
+					if(_obj.length==0){
+						f=true;
+					}else{
+						var _tov=_obj.val().toUpperCase();
+						_obj.val(_tov);
+						dataArr.push(_tov);
+					}
 				});
+				if(f){
+					layer.msg('表名必填');
+				}
 				data.field.tableNames=JSON.stringify(dataArr);
 				console.log(data.field);
 				$.ajax({
