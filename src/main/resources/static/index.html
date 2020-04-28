@@ -19,10 +19,19 @@
 			</div>
 			<!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
 			<div class="layui-form-item">
+				<label class="layui-form-label">数据库类型</label>
+				<div class="layui-input-block">
+					<select name="dbType" lay-verify="required">
+				        <option value="mysql">MySQL</option>
+				        <option value="Oracle">Oracle</option>
+				      </select>
+				</div>
+			</div>
+			<div class="layui-form-item">
 				<label class="layui-form-label">数据库连接信息</label>
 				<div class="layui-input-block">
 					<input type="text" name="dbUrl" required
-						placeholder="10.10.100.000:1521:orcl" 
+						placeholder="127.0.0.1:3306/test" 
 						class="layui-input">
 				</div>
 			</div>
@@ -151,6 +160,11 @@
 						return false;
 					}
 				}
+								
+				var isNeedUpper=false;
+				if(data.field.dbType=='Oracle'){					
+					isNeedUpper=true;
+				}
 				
 				var f=false;
 				var dataArr=new Array();
@@ -158,8 +172,11 @@
 					var _obj=$(obj);
 					if(_obj.length==0){
 						f=true;
-					}else{
-						var _tov=_obj.val().toUpperCase();
+					}else {
+						var _tov=_obj.val();
+						if(isNeedUpper){
+							_tov=_tov.toUpperCase();				
+						}						
 						_obj.val(_tov);
 						dataArr.push(_tov);
 					}

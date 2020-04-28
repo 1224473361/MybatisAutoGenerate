@@ -18,6 +18,10 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 public abstract class AbstractGenerator {
 
 	/**
+	 * 数据库类型
+	 */
+	private DbType dbType;
+	/**
 	 * 数据库连接字符串
 	 */
 	private String dbUrl;
@@ -56,9 +60,9 @@ public abstract class AbstractGenerator {
 	protected void generateByTables(String packageName, String... tableNames) {
 		GlobalConfig config = new GlobalConfig();
 		config.setDateType(DateType.ONLY_DATE).setActiveRecord(true).setAuthor(author).setOutputDir(outDir)
-		.setFileOverride(true);
+				.setFileOverride(true);
 		DataSourceConfig dataSourceConfig = new DataSourceConfig();
-		dataSourceConfig.setDbType(DbType.ORACLE).setUrl(dbUrl).setUsername(userName).setPassword(userPass)
+		dataSourceConfig.setDbType(dbType).setUrl(dbUrl).setUsername(userName).setPassword(userPass)
 				.setDriverName(driverName);
 		StrategyConfig strategyConfig = new StrategyConfig();
 		strategyConfig.setCapitalMode(true).setEntityLombokModel(true).setNaming(NamingStrategy.underline_to_camel)
@@ -94,6 +98,14 @@ public abstract class AbstractGenerator {
 
 	protected void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public DbType getDbType() {
+		return dbType;
+	}
+
+	public void setDbType(DbType dbType) {
+		this.dbType = dbType;
 	}
 
 	/**

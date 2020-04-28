@@ -5,23 +5,25 @@ import com.baomidou.mybatisplus.annotation.DbType;
 
 /**
  * 
- * @date 2019年9月3日
- * @author
+ * @author 12244
+ * @date 2020年4月28日
+ *
  */
-public class OracleGenerator extends AbstractGenerator {
+public class MySqlGenerator extends AbstractGenerator {
 
-	private static String driverName = "oracle.jdbc.OracleDriver";
+	private static String driverName = "com.mysql.jdbc.Driver";
 
-	private static String dbUrlPrefix = "jdbc:oracle:thin:@";
+	// jdbc:mysql://ip:port/hnyw
+	private static String dbUrlPrefix = "jdbc:mysql://";
 
-	public OracleGenerator(String dbUrl, String userName, String userPass, String outDir, String author) {
+	public MySqlGenerator(String dbUrl, String userName, String userPass, String outDir, String author) {
 		super(driverName);
 		this.setDbUrl(dbUrl);
 		this.setUserName(userName);
 		this.setUserPass(userPass);
 		this.setOutDir(outDir);
 		this.setAuthor(author);
-		this.setDbType(DbType.ORACLE);
+		this.setDbType(DbType.MYSQL);
 	}
 
 	/**
