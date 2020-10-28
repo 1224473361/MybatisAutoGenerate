@@ -3,11 +3,12 @@ package com.autogenerate.factory;
 import com.autogenerate.abs.AbstractGenerator;
 import com.autogenerate.modules.MySqlGenerator;
 import com.autogenerate.modules.OracleGenerator;
+import com.autogenerate.modules.PostgreSQLGenerator;
 
 /**
  * 构建工厂
- * @author 12244
- * @date 2020年4月28日
+ * 
+ * @author xhx
  *
  */
 public class GeneratorFactory {
@@ -29,6 +30,8 @@ public class GeneratorFactory {
 			return new MySqlGenerator(dbUrl, userName, userPass, outDir, author);
 		case "oracle":
 			return new OracleGenerator(dbUrl, userName, userPass, outDir, author);
+		case "postgresql":
+			return new PostgreSQLGenerator(dbUrl, userName, userPass, outDir, author);
 		default:
 			break;
 		}

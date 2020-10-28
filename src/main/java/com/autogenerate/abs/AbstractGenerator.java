@@ -1,5 +1,8 @@
 package com.autogenerate.abs;
 
+import java.util.List;
+import java.util.Map;
+
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -12,8 +15,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 /**
  * 核心生成逻辑
  * 
- * @date 2019年9月3日
- * @author lihui
+ * @author xhx
  */
 public abstract class AbstractGenerator {
 
@@ -84,8 +86,16 @@ public abstract class AbstractGenerator {
 		this.userName = userName;
 	}
 
+	protected String getUserName() {
+		return userName;
+	}
+
 	protected void setUserPass(String userPass) {
 		this.userPass = userPass;
+	}
+
+	protected String getUserPass() {
+		return userPass;
 	}
 
 	protected void setOutDir(String outDir) {
@@ -115,5 +125,12 @@ public abstract class AbstractGenerator {
 	 * @param packageName
 	 */
 	public abstract void generateCode(String[] tableNames, String packageName);
+
+	/**
+	 * 查询所有表的表信息
+	 * 
+	 * @return
+	 */
+	public abstract List<Map<String, String>> queryAllTableInfo();
 
 }

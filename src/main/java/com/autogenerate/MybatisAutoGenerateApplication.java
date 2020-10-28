@@ -10,23 +10,29 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 入口
+ * 启动类
  * 
- * @date 2019年9月3日
- * @author lihui
+ * @author xhx
  */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
 @Slf4j
 public class MybatisAutoGenerateApplication {
 
-	private static String url = "http://localhost/index.html";
+	private static String url = "http://localhost:801/index.html";
 
 	public static void main(String[] args) {
 		SpringApplication.run(MybatisAutoGenerateApplication.class, args);
-
 		try {
-			Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+			// 自动弹出操作网页
+			String osName = System.getProperty("os.name");
+			if (osName != null) {
+				if (osName.contains("Mac")) {
+					// 暂不支持
+				} else if (osName.contains("Windows")) {
+					Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+				}
+			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		}

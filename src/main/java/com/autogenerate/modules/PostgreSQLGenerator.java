@@ -8,24 +8,25 @@ import com.autogenerate.abs.AbstractGenerator;
 import com.baomidou.mybatisplus.annotation.DbType;
 
 /**
- * oracle
+ * PostgreSQL
  * 
  * @author xhx
+ *
  */
-public class OracleGenerator extends AbstractGenerator {
+public class PostgreSQLGenerator extends AbstractGenerator {
 
-	private static String driverName = "oracle.jdbc.OracleDriver";
+	private static String driverName = "org.postgresql.Driver";
 
-	private static String dbUrlPrefix = "jdbc:oracle:thin:@";
+	private static String dbUrlPrefix = "jdbc:postgresql://";
 
-	public OracleGenerator(String dbUrl, String userName, String userPass, String outDir, String author) {
+	public PostgreSQLGenerator(String dbUrl, String userName, String userPass, String outDir, String author) {
 		super(driverName);
 		this.setDbUrl(dbUrlPrefix + dbUrl);
 		this.setUserName(userName);
 		this.setUserPass(userPass);
 		this.setOutDir(outDir);
 		this.setAuthor(author);
-		this.setDbType(DbType.ORACLE);
+		this.setDbType(DbType.POSTGRE_SQL);
 	}
 
 	/**
